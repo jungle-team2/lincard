@@ -1,1 +1,1 @@
-console.log("login load");
+function login() {}
