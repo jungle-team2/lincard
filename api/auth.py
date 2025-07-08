@@ -11,9 +11,9 @@ from pymongo.errors import PyMongoError, DuplicateKeyError
 
 import bcrypt
 import re
-import jwt
 import bcrypt
 from datetime import datetime, timedelta
+from utils.jwt_utils import encode
 
 # settings
 client = MongoClient("localhost", 27017)
@@ -34,13 +34,9 @@ def verify_password(password, hashed) -> bool:
     return bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8"))
 
 
-SECRET_KEY = "your_secret_key"
-
-
 def create_jwt(email):
     payload = {"email": email, "exp": datetime.utcnow() + timedelta(hours=1)}
-    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-    return token
+    return encode(payload)
 
 
 def validation_signup(form_data) -> str | None:
