@@ -3,6 +3,8 @@ from flask import request, g, jsonify, redirect
 import jwt
 from utils.jwt_utils import decode
 
+from db import db
+
 
 def login_required(f):
     @wraps(f)
@@ -12,11 +14,16 @@ def login_required(f):
             return jsonify({"message": "로그인이 필요합니다"}), 401
         try:
             payload = decode(token)
-            g.user_email = payload.get("email")
+            email = payload.get("email")
+            g.user_email = email
+            user = db.users.find_one({"email": email})
+            if not user:
+                return jsonify({"message": "로그인이 필요합니다"}), 401
         except jwt.ExpiredSignatureError:
             return jsonify({"message": "토큰이 만료되었습니다"}), 401
         except jwt.InvalidTokenError:
             return jsonify({"message": "유효하지 않은 토큰입니다"}), 401
+
         return f(*args, **kwargs)
 
     return decorated_function
@@ -31,7 +38,11 @@ def login_required_html(f):
 
         try:
             payload = decode(token)
-            g.user_email = payload["email"]
+            email = payload.get("email")
+            g.user_email = email
+            user = db.users.find_one({"email": email})
+            if not user:
+                return redirect("/login")
         except jwt.ExpiredSignatureError:
             return redirect("/login")
         except jwt.InvalidTokenError:

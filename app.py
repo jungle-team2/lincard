@@ -12,6 +12,8 @@ from api.auth import auth_api
 app.register_blueprint(main)
 app.register_blueprint(auth_api, url_prefix="/api/auth")
 
+from db import db
+
 
 @app.before_request
 def load_logged_in_user():
@@ -28,8 +30,11 @@ def load_logged_in_user():
 
 @app.context_processor
 def inject_logged_in():
+    email = getattr(g, "user_email")
+    user = db.users.find_one({"email": email})
+
     return {
-        "logged_in": hasattr(g, "user_email"),
+        "logged_in": user,
     }
 
 

@@ -6,7 +6,6 @@ from flask import (
     url_for,
     make_response,
 )
-from pymongo import MongoClient
 from pymongo.errors import PyMongoError, DuplicateKeyError
 
 import bcrypt
@@ -16,9 +15,9 @@ from datetime import datetime, timedelta
 from utils.jwt_utils import encode
 
 # settings
-client = MongoClient("localhost", 27017)
-db = client.lincard
-users = db.users
+from db import db
+
+users = db["users"]
 
 auth_api = Blueprint("auth", __name__)
 
@@ -119,7 +118,7 @@ def sign_up():
         "password": hashed_password,
         "binaryUrl": "",
         "introduction": "",
-        "data": [],
+        "data": {},
     }
 
     try:

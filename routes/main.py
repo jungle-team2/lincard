@@ -3,6 +3,8 @@ from middlewares.auth_required import login_required_html
 
 main = Blueprint("main", __name__, template_folder="templates")
 
+from db import db
+
 
 @main.route("/")
 def index():
@@ -23,5 +25,5 @@ def signup():
 @login_required_html
 def mypage():
     user_email = g.user_email
-    print(user_email)
-    return render_template("mypage.html")
+    user = db.users.find_one({"email": user_email})
+    return render_template("mypage.html", user=user)
