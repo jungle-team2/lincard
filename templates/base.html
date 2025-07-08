@@ -6,7 +6,6 @@
   <title>Lincard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
 
 <body>
@@ -16,6 +15,10 @@
     {% block content %}
     {% endblock %}
   </main>
+
+  {% block script %}
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% endblock %}
 </body>
 
 </html>
