@@ -1,4 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-<div>로그인 화면</div>
+<div class="w-fit mx-auto py-24">
+    <div class="flex gap-5 mb-3">
+        <form action="" class="flex flex-col gap-1">
+            <div class="flex items-center">
+                <label class="w-20 " for="email">이메일</label>
+                <input type="text" id="email" class="border p-1 rounded-md">
+            </div>
+
+            <div class="flex items-center">
+                <label class="w-20 " for="password">패스워드</label>
+                <input type="password" id="password" class="border p-1 rounded-md">
+            </div>
+        </form>
+
+        <button type="submit" class="border rounded-sm px-5 cursor-pointer">로그인</button>
+    </div>
+
+    <div class="flex">
+        <div class="w-20"></div>
+        <a href="/signup">회원가입</a>
+    </div>
+</div>
 {% endblock %}
