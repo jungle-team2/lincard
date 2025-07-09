@@ -1,0 +1,10 @@
+<div class="bg-white w-fit p-10 rounded-xl ">
+    <h1 class="text-center text-2xl font-medium mb-10">아바타를 선택하세요</h1>
+    <div class="grid grid-cols-5 gap-12">
+        {% for i in range(1, 11) %}
+        <div class="w-40 h-40 cursor-pointer " id="selectable-avatar" data-id="{{i}}">
+            <img src="/static/avatars/{{i}}.png" class="object-cover w-full h-full" alt="">
+        </div>
+        {% endfor %}
+    </div>
+</div>

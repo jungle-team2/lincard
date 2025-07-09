@@ -26,3 +26,7 @@
 {{ super() }}
 <script src="{{ url_for('static', filename='js/mypage.js') }}"></script>
 {% endblock %}
+
+{% block modal %}
+{% include 'components/avatar_modal.html' %}
+{% endblock %}

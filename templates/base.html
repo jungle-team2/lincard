@@ -19,13 +19,6 @@
       font-family: "Noto Sans KR", sans-serif;
     }
   </style>
-
-  <style type="text/tailwindcss">
-    @theme {
-      --shadow-3xl: box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-    }
-  </style>
-
 </head>
 
 <body class="bg-slate-100 min-100vh">
@@ -34,6 +27,13 @@
   <main>
     {% block content %}
     {% endblock %}
+
+    <div id="modal" class="hidden fixed inset-0 w-screen h-screen z-50 bg-[rgba(0,0,0,0.1)]">
+      <div class="modal-content flex items-center justify-center h-full">
+        {% block modal %}
+        {% endblock %}
+      </div>
+    </div>
   </main>
 
   {% block script %}

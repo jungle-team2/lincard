@@ -5,9 +5,13 @@
         {% else %}
         {% endif %} -->
 
-        <div class="profile-image rounded-full w-30 h-30 bg-slate-300 flex items-center justify-center">
-            <img class="object-top object-contain"
-                src="https://em-content.zobj.net/source/apple/25/white-smiling-face_263a.png" />
+        <div id="profile-avatar" data-avatarId="{{user['avatarId']}}"
+            class="rounded-full w-30 h-30 bg-gray-100 flex items-center justify-center relative cursor-pointer"
+            onclick="openAvatarModal()">
+            <img class="object-cover w-full h-full" src="/static/avatars/{{user.avatarId}}.png" />
+            {% if is_edit %}
+            <img src="/static/icon//cursor.png" alt="" class="absolute bottom-0 right-0 w-8">
+            {% endif %}
         </div>
 
         <div class="flex-1">

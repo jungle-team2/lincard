@@ -49,6 +49,8 @@ def update_my():
     ordered_data = SON(data)  # 순서 유지
     introduction = body.get("introduction")
     name = body.get("name")
+    avatar_id = body.get("avatarId")
+
     try:
         update_user(
             user["email"],
@@ -56,6 +58,7 @@ def update_my():
                 "data": ordered_data,
                 "introduction": introduction,
                 "name": name,
+                "avatarId": avatar_id,
             },
         )
     except ValueError as e:
