@@ -12,8 +12,8 @@ def find_my_recommends():
     return find_recommends(g.user)
 
 
-def find_recommends(user):
-    user_id = user.get("_id")
+def find_recommends(user, user_id=None):
+    user_id = user_id if user_id else user.get("_id")
     if user_id:
         try:
             recommends = list(db.recommends.find({"userId": ObjectId(user_id)}))

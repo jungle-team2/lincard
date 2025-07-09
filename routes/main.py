@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, g, request, make_response
+from flask import Blueprint, render_template, g, request, make_response, jsonify
 from middlewares.auth_required import login_required_html
 from typing import List, Dict
 from dto.users import ProfileDTO
 from utils.recommends import find_recommends, find_my_recommends
 from bson import ObjectId
 import json
+from dto.users import RecommendItemDTO
+
 
 main = Blueprint("main", __name__, template_folder="templates")
 
@@ -73,10 +75,7 @@ def mypage():
 
 
 def get_random_user_pipeline(users: List[str]) -> List[Dict[str, any]]:
-    oids = []
-    for id in users:
-        oids.append(ObjectId(id))
-    return [{"$match": {"_id": {"$nin": oids}}}, {"$sample": {"size": 1}}]
+    return [{"$match": {"_id": {"$nin": users}}}, {"$sample": {"size": 1}}]
 
 
 @main.route("/mypage/recommends")
@@ -84,3 +83,18 @@ def get_random_user_pipeline(users: List[str]) -> List[Dict[str, any]]:
 def my_recommends():
     recommends = find_my_recommends()
     return render_template("my_recommends.html", recommends=recommends)
+
+@main.route("/<userId>/recommends")
+@login_required_html
+def getRecommends(userId):
+    recommends = find_recommends(None, userId)
+
+    recommendDTOs: List[RecommendItemDTO] = [
+        RecommendItemDTO(title=rec["title"], url=rec["url"], description=rec["description"])
+        for rec in recommends
+    ]    
+
+    return jsonify({
+        "userId": userId,
+        "recommends": recommendDTOs
+    })

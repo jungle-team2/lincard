@@ -1,38 +1,43 @@
+// 타입스크립트 문법 무시
 // @ts-nocheck
-/**
- * @typedef {import('jquery')} jQuery
- */
+/* global jQuery */
 
 $(document).ready(function () {
-  $(document).on("click", ".recommends-btn", function (e) {
+  $(document).on("click", ".show-recommends-btn", function (e) {
     e.preventDefault();
-    // 임의로 가져왔다고 치고 (나중에 수정 必)
     const userId = $(this).data("user-id");
-
-    result = showRecommends(userId);
+    result = requestRecommends(userId);
     if (!result) {
       return;
     }
 
     userId = result["userId"];
-    const { title, url, description } = result["recommends"];
-
-    // 1. 해당 userId profile칸을 비운다 2. 대신 recommends를 추가한다.
-    const followerContainer = $("#follower-container");
-    followerContainer.empty();
-    // 이젠 쭈르륵 html 확인 후 append
+    recommneds = result["recommneds"];
+    // 비우기 구현 필요 ex. $(this).empty();
+    for (const rec in recommneds) {
+      const [title, url, description] = rec;
+      // 이제 넘겨주기
+    }
   });
 
-  function showRecommends(userId) {
+  $(document).on("click", ".show-profile-btn", function (e) {
+    e.preventDefault();
+    const userId = $(this).data("user-id");
+    result = requestProfile(userId);
+    const introduction = result["introduction"];
+    const data = result["data"];
+    // 비우기 구현 필요
+  });
+
+  function requestRecommends(userId) {
     $.ajax({
-      url: `/api/user/${userId}/recommends`,
-      method: "get",
+      url: `/api/users/${userId}/recommends`,
+      method: "GET",
       success: function (data) {
         return data;
       },
-
       error: function (error) {
-        alert(`error: ${error}`);
+        alert(`추천 목록 조회 실패: ${error}`);
       },
     });
   }
