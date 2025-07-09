@@ -116,10 +116,10 @@ def sign_up():
     new_user = {
         "email": form_data["email"],
         "password": hashed_password,
-        "binaryUrl": "",
         "avatarId": 1,
         "name": form_data["email"].split(sep="@")[0],
         "introduction": "",
+        "followingIds": [],
         # "introduction": "안녕 테스트",
         "data": {},
     }

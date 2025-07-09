@@ -1,4 +1,14 @@
-from flask import Blueprint, render_template, g, request, make_response, jsonify
+from flask import (
+    Blueprint,
+    render_template,
+    g,
+    request,
+    make_response,
+    jsonify,
+    redirect,
+    url_for,
+    flash,
+)
 from middlewares.auth_required import login_required_html
 from typing import List, Dict
 from dto.users import ProfileDTO
@@ -13,23 +23,33 @@ from db import db
 usersCollection = db["users"]
 
 
-# ?userId=123&userId=456
 @main.route("/")
 def index():
+    recent_raw = request.cookies.get("recent_users", "[]")
+    try:
+        recent_ids = json.loads(recent_raw)
+    except:
+        recent_ids = []
+    if not recent_ids:
+        return swip()
+
+    recent = db.users.find_one({"_id": ObjectId(recent_ids[-1])})
+    recommends = find_recommends(recent)
+    return render_template("index.html", feed=recent, recommends=recommends)
+
+
+@main.route("/swip")
+def swip():
     recent_raw = request.cookies.get("recent_users", "[]")
     try:
         exclude_ids = json.loads(recent_raw)
     except:
         exclude_ids = []
-    # random user
-
-    # users: List[str] = request.args.getlist("userId")  # ['abc', 'def']
-    # list가 비어있을땐 그냥 진행
 
     pipeline = get_random_user_pipeline(exclude_ids)
     random_user = list(usersCollection.aggregate(pipeline))
 
-    # if not random_user:
+    # if not random_user:,
     #     return render_template("index.html", feed=None) 없을경우 어떻게 처리할건지 논의
 
     random_user = random_user[0] if random_user else None
@@ -49,13 +69,7 @@ def index():
         exclude_ids.remove(feed.userId)
     exclude_ids.append(feed.userId)
 
-    print(feed)
-
-    recommends = find_recommends(random_user)
-
-    resp = make_response(
-        render_template("index.html", feed=feed, recommends=recommends)
-    )
+    resp = make_response(redirect(url_for("main.index")))
     resp.set_cookie(
         "recent_users", json.dumps(exclude_ids[-5:]), max_age=86400 * 7, path="/"
     )
