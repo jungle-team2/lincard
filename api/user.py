@@ -1,6 +1,6 @@
 from flask import Blueprint, g, request, jsonify
 from pymongo.errors import PyMongoError
-from bson import SON
+from bson import SON, ObjectId
 
 from db import db
 
@@ -22,11 +22,28 @@ def update_user(email, user):
     return result
 
 
+@user_api.put("/my/recommends")
+@login_required
+def update_my_recommends():
+    user = g.user
+    user_id = user.get("_id")
+    recommends = request.get_json()
+
+    if not user_id:
+        return jsonify({"error": "올바르지 않은 유저"}), 500
+
+    db.recommends.delete_many({"userId": ObjectId(user_id)})
+
+    for recommend in recommends:
+        recommend["userId"] = ObjectId(user_id)
+        db.recommends.insert_one(recommend)
+    return jsonify({"result": "success"}), 200
+
+
 @user_api.put("/my")
 @login_required
 def update_my():
     user = g.user
-
     body = request.get_json()
     data = body.get("data")
     ordered_data = SON(data)  # 순서 유지

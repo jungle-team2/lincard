@@ -1,10 +1,77 @@
+{% extends "base.html" %}
 {% macro recommends(list, is_edit=False) %}
-<div class="card border-gray-500 border-2 w-[720px] h-[280px] p-10">
-    <ul>
-        <li>
-            <a href="/" class="text-blue-400">git 개념 정리 블로그</a> - 정리도
-            깔끔하고
-        </li>
-    </ul>
+
+<template id="template-recommend-row">
+    <li id="recommend-row" class="flex gap-1 items-center">
+        <input type="text" id="title" name="title"
+            class=" flex-1 border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
+        <input type="text" id="url" name="url"
+            class=" flex-1 border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
+        <div>
+            <input type="text" id="description" name="description"
+                class=" flex-1 border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
+        </div>
+
+        <button
+            class=" rec-del-btn bg-gray-50 hover:bg-gray-100 active:scale-95 rounded-xl p-1 px-3 cursor-pointer">🗑️</button>
+    </li>
+</template>
+
+<div id="recommends-container">
+    {% if is_edit %}
+    <div id="validation-alert" class="opacity-0 text-red-500 p-2" role="alert">모든 필수 값을 채워주세요</div>
+    {% endif %}
+    <div class="card border-gray-300 border-2 w-[720px] h-[360px] p-{{ 5 if is_edit else 10}} rounded-xl">
+        <div class="flex flex-col">
+            {% if is_edit %}
+            <div class="flex gap-1 items-center mb-5">
+                <div class="flex-1">제목
+                    <span class="text-red-500">*</span>
+                </div>
+                <div class="flex-1">url
+                    <span class="text-red-500">*</span>
+                </div>
+                <div class="flex-1">설명</div>
+                <div class="w-3"></div>
+            </div>
+            {% endif %}
+
+            <ul id="recommend-list" class="flex flex-col gap-3">
+                {% for rec in list %}
+                {% if is_edit %}
+                <li id="recommend-row" class="flex gap-1 items-center">
+                    <input type="text" id="title" name="title" value="{{rec['title']}}"
+                        class=" flex-1 border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
+                    <input type="text" id="url" name="url" value="{{rec['url']}}"
+                        class=" flex-1 border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
+                    <div>
+                        <input type="text" id="description" name="description" value="{{rec['description']}}"
+                            class=" flex-1 border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
+                    </div>
+
+                    <button
+                        class=" rec-del-btn bg-gray-50 hover:bg-gray-100 active:scale-95 rounded-xl p-1 px-3 cursor-pointer">🗑️</button>
+                </li>
+                {% else %}
+                <li class="flex gap-1">
+                    <a href="{{rec['url']}}" target="_blank"
+                        class="text-blue-400 overflow-hidden text-ellipsis whitespace-nowrap">{{rec['title']}}</a>
+                    <span>
+                        -
+                    </span>
+                    <div class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                        {{rec['description']}}
+                    </div>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+
+            {% if is_edit %}
+            <button id="recommend-add-btn"
+                class="active:scale-95 cursor-pointer bg-blue-100 p-0.5 shadow-sm rounded-2xl mt-3 text-xl">+</button>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endmacro %}
