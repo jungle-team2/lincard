@@ -18,7 +18,7 @@ list.addEventListener("click", (e) => {
 const renderBtn = () => {
   const itemsLen = list.querySelectorAll("#recommend-row").length;
 
-  if (itemsLen <= 5) {
+  if (itemsLen <= 7) {
     appendBtn.hidden = false;
   } else {
     appendBtn.hidden = true;

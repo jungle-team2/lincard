@@ -1,14 +1,18 @@
 {% macro card(user, is_edit=False) %}
-<div class="card border-gray-300 border-2 w-[720px] h-[360px]  p-7 pr-4 rounded-xl">
-    <div class="flex items-center gap-10">
+<div class="card shadow-md w-[700px] h-[{{500 if is_edit else 420}}px] p-12 rounded-[38px] bg-white">
+    <div class="flex items-start gap-7">
         <!-- {% if user["binary_url"] %}
-        <img src="{{user['binary_url']}}" alt="profile-image">
         {% else %}
-        <div class="profile-image rounded-full rou w-50 h-50 bg-gray-100 mr-3"></div>
         {% endif %} -->
 
+        <div class="profile-image rounded-full w-30 h-30 bg-slate-300 flex items-center justify-center">
+            <img class="object-top object-contain"
+                src="https://em-content.zobj.net/source/apple/25/white-smiling-face_263a.png" />
+        </div>
+
         <div class="flex-1">
-            <ul class="grid grid-cols-2 gap-3">
+            <div class="text-4xl font-medium mb-10">이름</div>
+            <ul class="grid grid-cols-2 gap-5">
                 {% if is_edit %}
 
                 {% set entries = user['data'].items() | list %}
@@ -16,7 +20,7 @@
                 {% if i < entries | length %} {% set pair=entries[i] %} {% set k=pair[0] %} {% set v=pair[1] %} {% else
                     %} {% set k="" %} {% set v="" %} {% endif %} <li id="card-edit" class="flex items-center gap-3">
                     <input type="text" id="key" name="key" value="{{k}}"
-                        class="border p-1 w-28 bg-gray-100 border-gray-300 focus:border-blue-400 rounded-md px-2 outline-none">
+                        class="border p-1 w-20 bg-gray-100 border-gray-300 focus:border-blue-400 rounded-md px-2 outline-none">
                     <input type="text" id="value" name="value" value="{{v}}"
                         class="w-full border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
                     </li>
@@ -26,7 +30,7 @@
                     {% for k,v in user['data'].items() %}
                     <li class="flex items-center gap-3">
                         <div
-                            class="w-28 bg-gray-100 rounded-md p-2 px-3 whitespace-nowrap overflow-hidden text-ellipsis">
+                            class="w-20 rounded-md whitespace-nowrap overflow-hidden text-ellipsis text-lg font-semibold">
                             {{k}}</div>
                         <div class="whitespace-nowrap overflow-hidden text-ellipsis">
                             {{v}}
@@ -35,17 +39,20 @@
                     {% endfor %}
                     {% endif %}
             </ul>
+            <div class="mt-5  pr-5 font-bold">Email: {{user["email"]}}</div>
         </div>
+
     </div>
 
-    <div class="mt-3 text-right pr-5 font-bold">Email: {{user["email"]}}</div>
 
     <div class="mt-10">
         {% if is_edit %}
         <textarea name="introduction" id="intruduction"
-            class="border p-1 w-full resize-none border-gray-300 focus:border-blue-400 rounded-md px-1 outline-none">{{user['introduction']}}</textarea>
+            class="border  p-1 w-full resize-none border-gray-300 focus:border-blue-400 rounded-md px-1 outline-none">{{user['introduction']}}</textarea>
         {% else %}
-        {{user["introduction"]}}
+        <div class="text-lg">
+            {{user["introduction"]}}
+        </div>
         {% endif %}
 
     </div>
