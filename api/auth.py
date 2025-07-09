@@ -136,4 +136,26 @@ def sign_up():
 
 @auth_api.post("/logout")
 def logout():
-    pass
+    resp = make_response(redirect("/"))
+
+    resp.set_cookie(
+        "access_token",  # 쿠키 이름
+        "",  # 빈 값으로 설정
+        max_age=0,  # 즉시 만료
+        httponly=True,  # 보안 설정 유지
+        secure=True,  # HTTPS 환경이라면 True
+        samesite="Lax",  # 또는 'Strict' or 'None'
+        path="/",  # 해당 경로 전체에서 쿠키 제거
+    )
+
+    resp.set_cookie(
+        "recent_users",  # 쿠키 이름
+        "",  # 빈 값으로 설정
+        max_age=0,  # 즉시 만료
+        httponly=True,  # 보안 설정 유지
+        secure=True,  # HTTPS 환경이라면 True
+        samesite="Lax",  # 또는 'Strict' or 'None'
+        path="/",  # 해당 경로 전체에서 쿠키 제거
+    )
+
+    return resp

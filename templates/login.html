@@ -1,29 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="w-fit mx-auto py-24 relative">
-    <form action="/api/auth/login" method="post" class="flex gap-5">
+    <form action="/api/auth/login" method="post" class="flex flex-col w-[400px] mx-auto">
         <div class="flex flex-col gap-3">
-            <div class="flex items-center">
-                <label class="w-24 pr-3 text-right " for="email">이메일</label>
-                <input type="text" name="email" class="border p-1 rounded-md" value="{{ form.email if form else '' }}">
+            <div class="flex flex-col  gap-2">
+                <label class="text-xl font-medium" for="email">이메일</label>
+                <input type="text" name="email" class="border border-gray-300 bg-white p-2 rounded-lg"
+                    value="{{ form.email if form else '' }}">
             </div>
 
-            <div class="flex items-center">
-                <label class="w-24 pr-3 text-right " for="password">패스워드</label>
-                <input type="password" name="password" class="border p-1 rounded-md"
+            <div class="flex flex-col gap-2">
+                <label class="text-xl font-medium" for="password">패스워드</label>
+                <input type="password" name="password" class="border border-gray-300 bg-white p-2 rounded-lg"
                     value="{{ form.password if form else '' }}">
             </div>
         </div>
-        <button type="submit" class="border rounded-sm px-5 cursor-pointer">로그인</button>
+
+        <div class="flex items-end justify-between mt-5">
+            <a href="/signup" class="text-blue-400 font-bold">회원가입</a>
+            <button type="submit" class=" rounded-lg px-8 py-2 bg-blue-500 text-white cursor-pointer">로그인</button>
+        </div>
     </form>
 
     {% if error %}
-    <p style="color: red" class="absolute bottom-0">{{ error }}</p>
+    <p style="color: red" class="absolute bottom-0 right-0">{{ error }}</p>
     {% endif %}
 
-    <div class="flex">
-        <div class="w-24 pr-3 text-right"></div>
-        <a href="/signup">회원가입</a>
-    </div>
 </div>
 {% endblock %}

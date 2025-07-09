@@ -6,7 +6,12 @@
 
         <div>
             {% if logged_in %}
-            <a href="/mypage" class="cursor-pointer text-lg">내 명함</a>
+            <div class="flex gap-7">
+                <form action="/api/auth/logout" method="post">
+                    <button type="submit" class="cursor-pointer text-lg">로그아웃</button>
+                </form>
+                <a href="/mypage" class="cursor-pointer text-lg">내 명함</a>
+            </div>
             {% else %}
             <a href="/login" class="cursor-pointer bg-blue-100 px-5 py-3 rounded-sm active:scale-95">로그인</a>
             {% endif %}
