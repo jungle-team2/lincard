@@ -23,11 +23,23 @@ $(document).ready(function () {
   $(document).on("click", ".show-profile-btn", function (e) {
     e.preventDefault();
     const userId = $(this).data("user-id");
-    result = requestProfile(userId);
-    const introduction = result["introduction"];
-    const data = result["data"];
+    const [userId, introduction, data] = requestProfile(userId);
     // 비우기 구현 필요
+    // 넘겨주면 html 화면 만들어주시기
   });
+
+  function requestProfile(userId) {
+    $.ajax({
+      url: `/api/users/${userId}`,
+      method: "GET",
+      success: function (data) {
+        return data;
+      },
+      error: function (error) {
+        alert(`사용자 정보 조회 실패: ${error}`);
+      },
+    });
+  }
 
   function requestRecommends(userId) {
     $.ajax({
