@@ -16,7 +16,6 @@ app.register_blueprint(user_api, url_prefix="/api/user")
 
 from db import db
 
-
 @app.before_request
 def load_auth():
     token = request.cookies.get("access_token")
