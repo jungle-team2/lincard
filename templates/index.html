@@ -5,8 +5,12 @@
 {% block content %}
 <div class="flex flex-col gap-7 items-center pt-1">
 
+  {% if not error %}
   {{ card_comp.card(feed) }}
   {{ recommends_comp.recommends(recommends) }}
+  {% else %}
+  {{ error }}
+  {% endif %}
 
   <div class="flex items-center gap-5">
     <button class="cursor-pointer border border-gray-300 text-xl bg-white px-12 py-4 rounded-xl active:scale-95">
