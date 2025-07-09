@@ -8,7 +8,20 @@ from db import db
 
 @main.route("/")
 def index():
-    return render_template("index.html")
+    # random user
+    feed = {
+        "email": "123@123.com",
+        "data": {
+            "name": "123",
+            "gender": "m",
+            "lang": "Python",
+            "name1": "123",
+            "gender1": "m",
+            "lang1": "Python",
+        },
+        "introduction": "123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest 123-feedtest123-feedtest 123-feedtest 123-feedtest  ",
+    }
+    return render_template("index.html", feed=feed)
 
 
 @main.route("/login")

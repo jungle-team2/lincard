@@ -1,13 +1,17 @@
-<div class="card border-gray-500 border-2 w-[720px] h-[400px] p-10">
+{% macro card(user, is_edit=False) %}
+<div class="card border-gray-500 border-2 w-[780px] h-[400px]  p-7 pr-3 rounded-lg">
     <div class="flex items-center gap-10">
-        <div class="profile-image rounded-full rou w-50 h-50 bg-gray-100"></div>
-        <ul class="flex flex-col gap-3">
-            {#
+        <div class="profile-image rounded-full rou w-50 h-50 bg-gray-100 mr-5"></div>
+        <ul class="grid grid-cols-2 gap-3 flex-1">
             {% for k,v in user['data'].items() %}
+            <li class="flex items-center gap-3">
+                <div class="w-20 bg-gray-100 rounded-md p-2 px-3">{{k}}</div>
+                <div class="whitespace-nowrap overflow-hidden text-ellipsis">{{v}}</div>
+            </li>
 
             {% endfor %}
-            #}
         </ul>
     </div>
-    <div class="mt-10">소개글</div>
+    <div class="mt-10">{{user["introduction"]}}</div>
 </div>
+{% endmacro %}

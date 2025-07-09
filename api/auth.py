@@ -118,6 +118,7 @@ def sign_up():
         "password": hashed_password,
         "binaryUrl": "",
         "introduction": "",
+        # "introduction": "안녕 테스트",
         "data": {},
     }
 

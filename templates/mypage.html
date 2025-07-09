@@ -1,4 +1,21 @@
 {% extends "base.html" %}
+{% import "components/card.html" as card_comp %}
+
 {% block content %}
-내 명함 정보
+<section>
+    <header class="flex justify-between px-20 py-10">
+        <button class="border cursor-pointer rounded-sm p-2 px-5">
+            <a href="/mypage/recommend">
+                추천자료 설정
+            </a>
+        </button>
+        <button class="border cursor-pointer rounded-sm p-2 px-5">
+            저장/편집
+        </button>
+
+    </header>
+    <main class="mx-auto w-fit">
+        {{ card_comp.card(user, True) }}
+    </main>
+</section>
 {% endblock %}
