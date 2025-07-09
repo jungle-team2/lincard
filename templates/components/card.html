@@ -1,5 +1,5 @@
 {% macro card(user, is_edit=False) %}
-<div class="card shadow-md w-[700px] h-[{{520 if is_edit else 420}}px] p-12 rounded-[38px] bg-white">
+<div id="card" class="card shadow-md w-[700px] h-[{{530 if is_edit else 420}}px] p-12 rounded-[38px] bg-white">
     <div class="flex items-start gap-7">
         <!-- {% if user["binary_url"] %}
         {% else %}

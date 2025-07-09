@@ -71,7 +71,7 @@ def swip():
 
     resp = make_response(redirect(url_for("main.index")))
     resp.set_cookie(
-        "recent_users", json.dumps(exclude_ids[-5:]), max_age=86400 * 7, path="/"
+        "recent_users", json.dumps(exclude_ids[-5:]), max_age=86400, path="/"
     )
     return resp
 
