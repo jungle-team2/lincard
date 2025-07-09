@@ -15,11 +15,16 @@ def index():
     # random user
 
     users: List[str] = request.args.getlist('userId') #['abc', 'def']
-    pipeline = get_random_user_pipeline(users)
-    random_user  = usersCollection.aggregate(pipeline)[0]
-    feed = ProfileDTO(userId=random_user["_id"], introduction=random_user["introduction"], data=random_user["data"])
-    feed = feed.model_dump_json()
+    # list가 비어있을땐 그냥 진행 
 
+    pipeline = get_random_user_pipeline(users)
+    random_user  = list(usersCollection.aggregate(pipeline))
+    
+    # if not random_user:
+    #     return render_template("index.html", feed=None) 없을경우 어떻게 처리할건지 논의 
+
+    random_user = random_user[0]
+    feed = ProfileDTO(userId=random_user["_id"], introduction=random_user["introduction"], data=random_user["data"])
     return render_template("index.html", feed=feed)
 
 

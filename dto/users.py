@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from typing import Dict, Any
 
 class ProfileDTO(BaseModel):
@@ -7,7 +7,7 @@ class ProfileDTO(BaseModel):
   data: Dict[str, Any] 
 
 class UserCreateDTO(BaseModel):
-  email: EmailStr
+  email: str
   password: str
 
   
