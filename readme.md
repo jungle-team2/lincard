@@ -19,6 +19,12 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
+- 패키지 설치후 requirements 동기화 (venv 내에서)
+
+```
+pip freeze > requirements.txt
+```
+
 ### 페이지 확장 예제
 
 - jinja template 상속 (base.html)
