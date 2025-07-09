@@ -30,7 +30,7 @@ def load_logged_in_user():
 
 @app.context_processor
 def inject_logged_in():
-    email = getattr(g, "user_email")
+    email = getattr(g, "user_email", None)
     user = db.users.find_one({"email": email})
 
     return {
