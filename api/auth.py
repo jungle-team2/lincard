@@ -6,7 +6,7 @@ from flask import (
     url_for,
     make_response,
 )
-from pymongo.errors import PyMongoError, DuplicateKeyError
+from pymongo.errors import PyMongoError
 
 import bcrypt
 import re
@@ -117,6 +117,8 @@ def sign_up():
         "email": form_data["email"],
         "password": hashed_password,
         "binaryUrl": "",
+        "avatarId": 1,
+        "name": form_data["email"].split(sep="@")[0],
         "introduction": "",
         # "introduction": "안녕 테스트",
         "data": {},

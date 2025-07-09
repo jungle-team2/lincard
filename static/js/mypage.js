@@ -1,4 +1,4 @@
-function onSave() {
+function onSaveMyCard() {
   const cardEdits = document.querySelectorAll("#card-edit");
 
   const data = [];
@@ -9,11 +9,12 @@ function onSave() {
     if (key) data.push([key, value]);
   }
 
+  const name = document.querySelector("#name").value;
   const introduction = document.querySelector("#intruduction").value;
 
   fetch("/api/user/my", {
     method: "put",
-    body: JSON.stringify({ data, introduction }),
+    body: JSON.stringify({ data, introduction, name }),
     headers: {
       "Content-Type": "application/json",
     },

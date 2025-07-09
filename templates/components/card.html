@@ -1,5 +1,5 @@
 {% macro card(user, is_edit=False) %}
-<div class="card shadow-md w-[700px] h-[{{500 if is_edit else 420}}px] p-12 rounded-[38px] bg-white">
+<div class="card shadow-md w-[700px] h-[{{520 if is_edit else 420}}px] p-12 rounded-[38px] bg-white">
     <div class="flex items-start gap-7">
         <!-- {% if user["binary_url"] %}
         {% else %}
@@ -11,7 +11,16 @@
         </div>
 
         <div class="flex-1">
-            <div class="text-4xl font-medium mb-10">이름</div>
+            <div class="text-4xl">
+                {% if is_edit %}
+                <input type="text" id="name" name="name" value="{{user['name']}}"
+                    class="border p-3 leading-3  border-gray-300 focus:border-blue-400 rounded-md outline-none">
+                {% else %}
+                <div class="font-medium mb-3">{{user['name']}}</div>
+                {% endif %}
+            </div>
+            <div class="mb-10 font-medium">Email: {{user["email"]}}</div>
+
             <ul class="grid grid-cols-2 gap-5">
                 {% if is_edit %}
 
@@ -39,7 +48,6 @@
                     {% endfor %}
                     {% endif %}
             </ul>
-            <div class="mt-5  pr-5 font-bold">Email: {{user["email"]}}</div>
         </div>
 
     </div>
@@ -47,8 +55,8 @@
 
     <div class="mt-10">
         {% if is_edit %}
-        <textarea name="introduction" id="intruduction"
-            class="border  p-1 w-full resize-none border-gray-300 focus:border-blue-400 rounded-md px-1 outline-none">{{user['introduction']}}</textarea>
+        <textarea name="introduction" id="intruduction" rows="3"
+            class="border p-3 w-full resize-none border-gray-300 focus:border-blue-400 rounded-xl outline-none">{{user['introduction']}}</textarea>
         {% else %}
         <div class="text-lg">
             {{user["introduction"]}}

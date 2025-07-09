@@ -48,13 +48,14 @@ def update_my():
     data = body.get("data")
     ordered_data = SON(data)  # 순서 유지
     introduction = body.get("introduction")
-
+    name = body.get("name")
     try:
         update_user(
             user["email"],
             {
                 "data": ordered_data,
                 "introduction": introduction,
+                "name": name,
             },
         )
     except ValueError as e:

@@ -38,13 +38,18 @@ def index():
 
     feed = ProfileDTO(
         userId=str(random_user["_id"]),
+        email=random_user["email"],
         introduction=random_user["introduction"],
         data=random_user["data"],
+        name=random_user["name"],
+        avatarId=random_user["avatarId"],
     )
 
     if feed.userId in exclude_ids:
         exclude_ids.remove(feed.userId)
     exclude_ids.append(feed.userId)
+
+    print(feed)
 
     recommends = find_recommends(random_user)
 
