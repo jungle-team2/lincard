@@ -12,6 +12,7 @@
   {{ error }}
   {% endif %}
 
+  {% if not error %}
   <div class="flex items-center gap-5">
     <button class="
     cursor-pointer border border-gray-300 text-xl bg-white px-12 py-4 rounded-xl 
@@ -28,5 +29,6 @@
       </button>
     </form>
   </div>
+  {% endif %}
 </div>
 {% endblock %}

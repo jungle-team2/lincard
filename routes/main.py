@@ -77,6 +77,7 @@ def signup():
 def mypage():
     return render_template("mypage.html", user=g.user)
 
+
 @main.route("/<userId>/following", methods=["PATCH"])
 @login_required_html
 def following(userId):
@@ -84,9 +85,11 @@ def following(userId):
     followerId = g.user["_id"]
     if not followerId:
         return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
-    
-    db.users.update_one({"_id": ObjectId(followerId)}, {"$addToSet": {"followingIds": ObjectId(userId)}})
-    
+
+    db.users.update_one(
+        {"_id": ObjectId(followerId)}, {"$addToSet": {"followingIds": ObjectId(userId)}}
+    )
+
     return jsonify({"result": "success", "message": "성공적으로 팔로윙"})
 
 @main.route("/<userId>/following", methods=["DELETE"])
@@ -120,17 +123,18 @@ def get_recommends(userId):
     recommendDTOs = []
     try:
         recommendDTOs = [
-        {
-            "title": rec["title"],
-            "url": rec["url"],
-            "description": rec["description"],
-        }
-        for rec in recommends
-    ]
+            {
+                "title": rec["title"],
+                "url": rec["url"],
+                "description": rec["description"],
+            }
+            for rec in recommends
+        ]
     except:
         return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
 
     return jsonify({"result": "success", "recommends": recommendDTOs}), 200
+
 
 def get_random_user_pipeline(users: List[str]) -> List[Dict[str, any]]:
     oids = []
