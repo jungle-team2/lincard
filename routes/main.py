@@ -42,8 +42,9 @@ def index():
         data=random_user["data"],
     )
 
-    if feed.userId not in exclude_ids:
-        exclude_ids.append(feed.userId)
+    if feed.userId in exclude_ids:
+        exclude_ids.remove(feed.userId)
+    exclude_ids.append(feed.userId)
 
     recommends = find_recommends(random_user)
 
