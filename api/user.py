@@ -4,6 +4,9 @@ from bson import SON
 
 from db import db
 
+from middlewares.auth_required import login_required
+
+
 user_api = Blueprint("user", __name__)
 
 
@@ -20,6 +23,7 @@ def update_user(email, user):
 
 
 @user_api.put("/my")
+@login_required
 def update_my():
     user = g.user
 
