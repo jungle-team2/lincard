@@ -78,7 +78,9 @@ def following(userId):
     followerId = g.user["_id"]
     if not followerId:
         return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
+    
     db.users.update_one({"_id": ObjectId(followerId)}, {"$addToSet": {"followingIds": ObjectId(userId)}})
+    
     return jsonify({"result": "success", "message": "성공적으로 팔로윙"})
 
 
