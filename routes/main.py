@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, g, request, make_response
+from flask import Blueprint, render_template, g, request, make_response, jsonify
 from middlewares.auth_required import login_required_html
 from typing import List, Dict
 from dto.users import ProfileDTO
@@ -70,6 +70,16 @@ def signup():
 @login_required_html
 def mypage():
     return render_template("mypage.html", user=g.user)
+
+@main.route("/<userId>/following")
+@login_required_html
+def following(userId):
+
+    followerId = g.user["_id"]
+    if not followerId:
+        return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
+    db.users.update_one({"_id": ObjectId(followerId)}, {"$addToSet": {"followingIds": ObjectId(userId)}})
+    return jsonify({"result": "success", "message": "성공적으로 팔로윙"})
 
 
 def get_random_user_pipeline(users: List[str]) -> List[Dict[str, any]]:
