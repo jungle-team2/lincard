@@ -9,7 +9,7 @@
                 추천자료 설정
             </a>
         </button>
-        <button class="border cursor-pointer rounded-sm p-2 px-5">
+        <button onclick="onSave()" class="border cursor-pointer rounded-sm p-2 px-5">
             저장/편집
         </button>
 
@@ -18,4 +18,10 @@
         {{ card_comp.card(user, True) }}
     </main>
 </section>
+{% endblock %}
+
+
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/mypage.js') }}"></script>
 {% endblock %}

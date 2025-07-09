@@ -37,6 +37,4 @@ def signup():
 @main.route("/mypage")
 @login_required_html
 def mypage():
-    user_email = g.user_email
-    user = db.users.find_one({"email": user_email})
-    return render_template("mypage.html", user=user)
+    return render_template("mypage.html", user=g.user)
