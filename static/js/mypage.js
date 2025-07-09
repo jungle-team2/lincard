@@ -18,6 +18,9 @@ function onSave() {
       "Content-Type": "application/json",
     },
   })
-    .then(() => alert("저장 완료"))
+    .then((res) => {
+      if (res.status !== 200) alert("저장 실패");
+      else alert("저장 완료");
+    })
     .catch(() => alert("저장 실패"));
 }

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "components/recommends.html" as recommends_comp %}
+
+{% block content %}
+<section>
+    <header class="flex justify-between px-20 py-10">
+        <h1 class="text-xl">
+            추천자료 설정
+        </h1>
+        <button onclick="onSave()" class="border cursor-pointer rounded-sm p-2 px-5">
+            편집내용 저장
+        </button>
+
+    </header>
+    <main class="mx-auto w-fit">
+        {{ recommends_comp.recommends(recommends, True) }}
+    </main>
+</section>
+{% endblock %}
+
+
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/my_recommends.js') }}"></script>
+{% endblock %}
