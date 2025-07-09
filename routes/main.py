@@ -26,13 +26,14 @@ def index():
     #     return render_template("index.html", feed=None) 없을경우 어떻게 처리할건지 논의
 
     random_user = random_user[0]
-    print(random_user)
     feed = ProfileDTO(
         userId=str(random_user["_id"]),
         introduction=random_user["introduction"],
         data=random_user["data"],
     )
-    return render_template("index.html", feed=feed)
+
+    recommends = find_recommends(random_user)
+    return render_template("index.html", feed=feed, recommends=recommends)
 
 
 @main.route("/login")
