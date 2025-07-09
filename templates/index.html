@@ -13,10 +13,16 @@
   {% endif %}
 
   <div class="flex items-center gap-5">
-    <button class="cursor-pointer border border-gray-300 text-xl bg-white px-12 py-4 rounded-xl active:scale-95">
+    <button class="
+    cursor-pointer border border-gray-300 text-xl bg-white px-12 py-4 rounded-xl 
+    opacity-{{ 50 if error else 100 }}
+    active:scale-{{ 100 if error else 95 }}">
       팔로우
     </button>
-    <button class="cursor-pointer text-xl bg-blue-400 text-white px-12 py-4 rounded-xl active:scale-95">
+    <button class="
+    cursor-pointer text-xl bg-blue-400 text-white px-12 py-4 rounded-xl 
+    opacity-{{ 50 if error else 100 }}
+    active:scale-{{ 100 if error else 95 }}">
       스윕
     </button>
   </div>
