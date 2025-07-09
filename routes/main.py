@@ -77,7 +77,7 @@ def signup():
 def mypage():
     return render_template("mypage.html", user=g.user)
 
-@main.route("/<userId>/following")
+@main.route("/<userId>/following", methods=["PATCH"])
 @login_required_html
 def following(userId):
 
@@ -89,6 +89,25 @@ def following(userId):
     
     return jsonify({"result": "success", "message": "성공적으로 팔로윙"})
 
+
+@main.route("/<userId>/recommends", methods=["GET"])
+@login_required_html
+def get_recommends(userId):
+    recommends = find_recommends(None, userId)
+    recommendDTOs = []
+    try:
+        recommendDTOs = [
+        {
+            "title": rec["title"],
+            "url": rec["url"],
+            "description": rec["description"],
+        }
+        for rec in recommends
+    ]
+    except:
+        return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
+
+    return jsonify({"result": "success", "recommends": recommendDTOs}), 200
 
 def get_random_user_pipeline(users: List[str]) -> List[Dict[str, any]]:
     oids = []
