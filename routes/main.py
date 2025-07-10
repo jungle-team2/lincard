@@ -115,6 +115,12 @@ def mypage():
 @login_required_html
 def following(userId):
     followerId = g.user["_id"]
+    if not followerId:
+        return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
+    
+    if followerId == userId:
+        return jsonify({"result": "failed", "message": "자신을 팔로우하지 않는다"}), 400
+
     db.users.update_one(
         {"_id": ObjectId(followerId)}, {"$addToSet": {"followingIds": ObjectId(userId)}}
     )
