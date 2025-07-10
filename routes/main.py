@@ -14,6 +14,8 @@ from dto.users import ProfileDTO
 from utils.recommends import find_recommends, find_my_recommends
 from bson import ObjectId
 import json
+from utils.opengraph import fetch_opengraph_data
+from urllib.parse import urlparse
 
 main = Blueprint("main", __name__, template_folder="templates")
 
@@ -117,7 +119,7 @@ def following(userId):
     followerId = g.user["_id"]
     if not followerId:
         return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
-    
+
     if followerId == userId:
         return jsonify({"result": "failed", "message": "자신을 팔로우하지 않는다"}), 400
 
@@ -224,4 +226,48 @@ def follow_book():
         following=following,
         current_page=page,
         total_pages=total_pages,
+    )
+
+
+# routes/main.py (예시)
+@main.route("/follow-book/recommends")
+@login_required_html
+def follow_book_recommends():
+    user_id = str(g.user["_id"])
+    user = db.users.find_one({"_id": ObjectId(user_id)}, {"followingIds": 1})
+    following_ids = user.get("followingIds", [])
+
+    raw_recommends = list(db.recommends.find({"userId": {"$in": following_ids}}))
+
+    recommend_user_map = {
+        str(u["_id"]): u
+        for u in db.users.find(
+            {"_id": {"$in": following_ids}}, {"email": 1, "introduction": 1}
+        )
+    }
+
+    valid_recommends = []
+
+    for item in raw_recommends:
+        url = item.get("url", "").strip()
+
+        # 1. URL이 없거나 잘못된 형식이면 skip
+        parsed = urlparse(url)
+        if not (parsed.scheme in ("http", "https") and parsed.netloc):
+            continue
+
+        # 2. OpenGraph 데이터 가져오기 (실패 시 skip)
+        og_data = fetch_opengraph_data(url)
+        if not og_data["title"]:  # 타이틀이 없으면 OpenGraph 실패로 간주
+            continue
+
+        item["og"] = og_data
+        valid_recommends.append(item)
+
+        print(valid_recommends)
+
+    return render_template(
+        "follow_book_recommends.html",
+        recommends=valid_recommends,
+        recommend_user_map=recommend_user_map,
     )

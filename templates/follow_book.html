@@ -3,9 +3,18 @@
 
 {% block content %}
 <div class="text-3xl font-medium py-5 px-24 flex items-center justify-between">
-    <div class="">
-        팔로우북
+    <div class="flex items-center gap-5">
+        <div class="">
+            팔로우북
+        </div>
+
+        <form action="/follow-book/recommends" method="get">
+            <button class="py-3 px-10 bg-white border border-gray-300 rounded-xl active:scale-95 transition text-lg">
+                추천 콘텐츠 보기</button>
+        </form>
     </div>
+
+
 
     {% if current_page %}
     <div class="">

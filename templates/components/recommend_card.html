@@ -1,0 +1,37 @@
+{% macro card(user, item, is_edit=False) %}
+<li class="p-10 bg-white rounded-xl">
+
+    {% if item.og.title %}
+    <a href="{{ item.url }}" target="_blank"
+        class=" mb-5 block border border-gray-300 rounded-md overflow-hidden hover:shadow-lg transition">
+        {% if item.og.image %}
+        <img src="{{ item.og.image }}" alt="preview" class="w-full h-40 object-cover">
+        {% endif %}
+        <div class="p-3 ">
+            <h2 class="text-md font-bold text-gray-800 mb-1">{{ item.og.title }}</h2>
+            <p class="text-sm text-gray-600 line-clamp-2">{{ item.og.description }}</p>
+        </div>
+    </a>
+    {% endif %}
+
+    <div class="flex items-center gap-3">
+        <a href="{{ item.url }}" target="_blank"
+            class="text-blue-400 overflow-hidden text-ellipsis whitespace-nowrap">{{
+            item.title }}</a>
+        <span>
+            -
+        </span>
+        <div class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+            {{ item.description}}
+        </div>
+    </div>
+
+
+    <p class="text-lg text-gray-600 mb-3">
+        추천 유저: {{ user.name }}
+    </p>
+
+
+</li>
+
+{% endmacro %}
