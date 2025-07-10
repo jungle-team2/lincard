@@ -180,3 +180,48 @@ def get_random_user_pipeline(
 def my_recommends():
     recommends = find_my_recommends()
     return render_template("my_recommends.html", recommends=recommends)
+
+
+def get_followings(user_id: str, page: int = 1, page_size: int = 10):
+    if not ObjectId.is_valid(user_id):
+        return [], 0
+    oid = ObjectId(user_id)
+
+    # 팔로우하는 유저들 찾기
+    user = db.users.find_one({"_id": oid}, {"followingIds": 1})
+    if not user or "followingIds" not in user:
+        return [], 0
+
+    following_ids = user["followingIds"]
+    if not following_ids:
+        return [], 0
+
+    following_ids = user["followingIds"]
+    total = len(following_ids)
+
+    # 페이징 계산
+    start = (page - 1) * page_size
+    end = start + page_size
+    sliced_ids = following_ids[start:end]
+
+    followings = list(db.users.find({"_id": {"$in": sliced_ids}}, {"followingIds": 0}))
+    return followings, total
+
+
+@main.route("/follow-book")
+@login_required_html
+def follow_book():
+    page = int(request.args.get("page", 1))
+    page_size = 6
+
+    following, total = get_followings(
+        str(g.user["_id"]), page=page, page_size=page_size
+    )
+    total_pages = (total + page_size - 1) // page_size  # 올림
+
+    return render_template(
+        "follow_book.html",
+        following=following,
+        current_page=page,
+        total_pages=total_pages,
+    )

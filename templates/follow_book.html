@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "components/card.html" as card_comp %}
+
+{% block content %}
+<div class="text-3xl font-medium py-5 px-24 flex items-center justify-between">
+    <div class="">
+        팔로우북
+    </div>
+
+    {% if current_page %}
+    <div class="">
+        {{current_page}} / {{total_pages}} 페이지
+    </div>
+    {% endif %}
+
+
+</div>
+
+
+{% if not following %}
+<div>팔로워가 없습니다</div>
+{% else %}
+<div class="grid grid-cols-2 gap-x-10 gap-y-3 w-fit mx-auto">
+    {% for user in following %}
+    {{ card_comp.card(user) }}
+    {% endfor %}
+</div>
+
+<div class="flex justify-center items-center gap-4 mt-6 mb-20">
+    {% if current_page > 1 %}
+    <a href="{{ url_for('main.follow_book', page=current_page-1) }}"
+        class="py-3 px-10 bg-white border border-gray-300 rounded-xl active:scale-95 transition">
+        ⬅️ 이전
+    </a>
+    {% endif %}
+
+    <span class="text-sm text-gray-600">
+        <strong class="text-black">{{ current_page }}</strong> / {{ total_pages }}
+    </span>
+
+    {% if current_page < total_pages %} <a href="{{ url_for('main.follow_book', page=current_page+1) }}"
+        class="py-3 px-10 bg-white border border-gray-300 rounded-xl active:scale-95 transition">
+        다음 ➡️
+        </a>
+        {% endif %}
+</div>
+
+{% endif %}
+{% endblock %}
