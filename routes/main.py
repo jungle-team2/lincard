@@ -7,7 +7,6 @@ from flask import (
     jsonify,
     redirect,
     url_for,
-    flash,
 )
 from middlewares.auth_required import login_required_html, login_required
 from typing import List, Dict
@@ -49,17 +48,24 @@ def index():
 
 @main.route("/swip")
 def swip():
+    filter_option = request.args.get("filter")
     recent_raw = request.cookies.get("recent_users", "[]")
+
+    if getattr(g, "user", None) and filter_option == "same-recommend":
+        my_rec = find_my_recommends()
+        my_urls = list({r["url"] for r in my_rec})
+    else:
+        my_urls = []
+
     try:
         exclude_ids = json.loads(recent_raw)
     except:
         exclude_ids = []
-
+    # 본인제외
     if getattr(g, "user", None):
         exclude_ids.append(str(g.user["_id"]))
 
-    print(exclude_ids)
-    pipeline = get_random_user_pipeline(exclude_ids)
+    pipeline = get_random_user_pipeline(exclude_ids, my_urls)
     random_user = list(usersCollection.aggregate(pipeline))
 
     # if not random_user:,
@@ -167,11 +173,29 @@ def get_recommends(userId):
     return jsonify({"result": "success", "recommends": recommendDTOs}), 200
 
 
-def get_random_user_pipeline(users: List[str]) -> List[Dict[str, any]]:
+def get_random_user_pipeline(
+    ignore_ids: List[str], recommended_urls: List[str]
+) -> List[Dict[str, any]]:
     oids = []
-    for id in users:
+    for id in ignore_ids:
         oids.append(ObjectId(id))
-    return [{"$match": {"_id": {"$nin": oids}}}, {"$sample": {"size": 1}}]
+
+    pipeline = [
+        {"$match": {"_id": {"$nin": oids}}},
+        {
+            "$lookup": {
+                "from": "recommends",
+                "localField": "_id",
+                "foreignField": "userId",
+                "as": "user_recommends",
+            }
+        },
+    ]
+    if recommended_urls:
+        pipeline.append({"$match": {"user_recommends.url": {"$in": recommended_urls}}})
+
+    pipeline.append({"$sample": {"size": 1}})
+    return pipeline
 
 
 @main.route("/mypage/recommends")
