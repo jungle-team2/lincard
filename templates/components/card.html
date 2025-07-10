@@ -1,11 +1,7 @@
 {% macro card(user, is_edit=False) %}
 <div id="card" class="card shadow-md w-[700px] h-[{{530 if is_edit else 420}}px] p-12 rounded-[38px] bg-white">
     <div class="flex items-start gap-7">
-        <!-- {% if user["binary_url"] %}
-        {% else %}
-        {% endif %} -->
-
-        <div id="profile-avatar" data-avatarId="{{user['avatarId']}}"
+            <div id="profile-avatar" data-avatarid="{{user['avatarId']}}"
             class="rounded-full w-30 h-30 bg-gray-100 flex items-center justify-center relative cursor-pointer"
             onclick="openAvatarModal()">
             <img class="object-cover w-full h-full" src="/static/avatars/{{user.avatarId}}.png" />

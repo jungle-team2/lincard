@@ -11,8 +11,10 @@ function onSaveMyCard() {
 
   const name = document.querySelector("#name").value;
   const introduction = document.querySelector("#intruduction").value;
-  const avatarId =
-    document.querySelector("#profile-avatar").dataset["avatarId"];
+  const avatarId = Number(
+    document.querySelector("#profile-avatar").dataset["avatarid"]
+  );
+  console.log(document.querySelector("#profile-avatar"));
 
   fetch("/api/user/my", {
     method: "put",
@@ -46,7 +48,7 @@ function selectAvatar(avatarId) {
   const avatar = document.querySelector("#profile-avatar");
   const img = avatar.querySelector("img");
 
-  avatar.dataset["avatarId"] = avatarId;
+  avatar.dataset["avatarid"] = avatarId;
   img.src = `/static/avatars/${avatarId}.png`;
 
   closeAvatarModal();
