@@ -1,68 +1,79 @@
 {% macro card(user, is_edit=False) %}
-<div id="card" class="card shadow-md w-[700px] h-[{{530 if is_edit else 420}}px] p-12 rounded-[38px] bg-white">
-    <div class="flex items-start gap-7">
-            <div id="profile-avatar" data-avatarid="{{user['avatarId']}}"
-            class="rounded-full w-30 h-30 bg-gray-100 flex items-center justify-center relative cursor-pointer"
-            onclick="openAvatarModal()">
-            <img class="object-cover w-full h-full" src="/static/avatars/{{user.avatarId}}.png" />
-            {% if is_edit %}
-            <img src="/static/icon//cursor.png" alt="" class="absolute bottom-0 right-0 w-8">
-            {% endif %}
-        </div>
 
-        <div class="flex-1">
-            <div class="text-4xl">
-                {% if is_edit %}
-                <input type="text" id="name" name="name" value="{{user['name']}}"
-                    class="border p-3 leading-3  border-gray-300 focus:border-blue-400 rounded-md outline-none">
-                {% else %}
-                <div class="font-medium mb-3">{{user['name']}}</div>
-                {% endif %}
-            </div>
-            <div class="mb-10 font-medium">Email: {{user["email"]}}</div>
-
-            <ul class="grid grid-cols-2 gap-5">
-                {% if is_edit %}
-
-                {% set entries = user['data'].items() | list %}
-                {% for i in range(6) %}
-                {% if i < entries | length %} {% set pair=entries[i] %} {% set k=pair[0] %} {% set v=pair[1] %} {% else
-                    %} {% set k="" %} {% set v="" %} {% endif %} <li id="card-edit" class="flex items-center gap-3">
-                    <input type="text" id="key" name="key" value="{{k}}"
-                        class="border p-1 w-20 bg-gray-100 border-gray-300 focus:border-blue-400 rounded-md px-2 outline-none">
-                    <input type="text" id="value" name="value" value="{{v}}"
-                        class="w-full border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
-                    </li>
-                    {% endfor %}
-
-                    {% else %}
-                    {% for k,v in user['data'].items() %}
-                    <li class="flex items-center gap-3">
-                        <div
-                            class="w-20 rounded-md whitespace-nowrap overflow-hidden text-ellipsis text-lg font-semibold">
-                            {{k}}</div>
-                        <div class="whitespace-nowrap overflow-hidden text-ellipsis">
-                            {{v}}
-                        </div>
-                    </li>
-                    {% endfor %}
-                    {% endif %}
-            </ul>
-        </div>
-
-    </div>
-
-
-    <div class="mt-10">
-        {% if is_edit %}
-        <textarea name="introduction" id="intruduction" rows="3"
-            class="border p-3 w-full resize-none border-gray-300 focus:border-blue-400 rounded-xl outline-none">{{user['introduction']}}</textarea>
-        {% else %}
-        <div class="text-lg">
-            {{user["introduction"]}}
+<div>
+    <div class="flex items-center justify-end gap-3 h-5">
+        {% if user['hasSameRecommend'] %}
+        <div class="text-lg mb-3">
+            📚 같은 자료를 추천한 유저
         </div>
         {% endif %}
+    </div>
+    <div id="card" class="card shadow-md w-[700px] h-[{{530 if is_edit else 420}}px] p-12 rounded-[38px] bg-white">
+        <div class="flex items-start gap-7">
+            <div id="profile-avatar" data-avatarid="{{user['avatarId']}}"
+                class="rounded-full w-30 h-30 bg-gray-100 flex items-center justify-center relative cursor-pointer"
+                onclick="openAvatarModal()">
+                <img class="object-cover w-full h-full" src="/static/avatars/{{user.avatarId}}.png" />
+                {% if is_edit %}
+                <img src="/static/icon//cursor.png" alt="" class="absolute bottom-0 right-0 w-8">
+                {% endif %}
+            </div>
 
+            <div class="flex-1">
+                <div class="text-4xl">
+                    {% if is_edit %}
+                    <input type="text" id="name" name="name" value="{{user['name']}}"
+                        class="border p-3 leading-3  border-gray-300 focus:border-blue-400 rounded-md outline-none">
+                    {% else %}
+                    <div class="font-medium mb-3">{{user['name']}}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-10 font-medium">Email: {{user["email"]}}</div>
+
+                <ul class="grid grid-cols-2 gap-5">
+                    {% if is_edit %}
+
+                    {% set entries = user['data'].items() | list %}
+                    {% for i in range(6) %}
+                    {% if i < entries | length %} {% set pair=entries[i] %} {% set k=pair[0] %} {% set v=pair[1] %} {%
+                        else %} {% set k="" %} {% set v="" %} {% endif %} <li id="card-edit"
+                        class="flex items-center gap-3">
+                        <input type="text" id="key" name="key" value="{{k}}"
+                            class="border p-1 w-20 bg-gray-100 border-gray-300 focus:border-blue-400 rounded-md px-2 outline-none">
+                        <input type="text" id="value" name="value" value="{{v}}"
+                            class="w-full border p-1 border-gray-300 focus:border-blue-400 rounded-lg px-1 outline-none">
+                        </li>
+                        {% endfor %}
+
+                        {% else %}
+                        {% for k,v in user['data'].items() %}
+                        <li class="flex items-center gap-3">
+                            <div
+                                class="w-20 rounded-md whitespace-nowrap overflow-hidden text-ellipsis text-lg font-semibold">
+                                {{k}}</div>
+                            <div class="whitespace-nowrap overflow-hidden text-ellipsis">
+                                {{v}}
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+                </ul>
+            </div>
+
+        </div>
+
+
+        <div class="mt-10">
+            {% if is_edit %}
+            <textarea name="introduction" id="intruduction" rows="3"
+                class="border p-3 w-full resize-none border-gray-300 focus:border-blue-400 rounded-xl outline-none">{{user['introduction']}}</textarea>
+            {% else %}
+            <div class="text-lg">
+                {{user["introduction"]}}
+            </div>
+            {% endif %}
+
+        </div>
     </div>
 </div>
 {% endmacro %}

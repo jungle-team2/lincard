@@ -35,6 +35,15 @@ def index():
 
     recent = db.users.find_one({"_id": ObjectId(recent_ids[-1])})
     recommends = find_recommends(recent)
+    # 추가 유사 판정
+    if getattr(g, "user", None):
+        my_rec = find_my_recommends()
+        my_urls = {r["url"] for r in my_rec}
+        some_same_rec = any(r["url"] in my_urls for r in recommends)
+    else:
+        some_same_rec = False
+
+    recent["hasSameRecommend"] = some_same_rec
     return render_template("index.html", feed=recent, recommends=recommends)
 
 
@@ -89,6 +98,7 @@ def signup():
 @main.route("/mypage")
 @login_required_html
 def mypage():
+    print(g.user)
     return render_template("mypage.html", user=g.user)
 
 
@@ -106,6 +116,7 @@ def following(userId):
 
     return jsonify({"result": "success", "message": "성공적으로 팔로윙"})
 
+
 @main.route("/<userId>/following", methods=["DELETE"])
 @login_required_html
 def un_following(userId):
@@ -113,21 +124,21 @@ def un_following(userId):
     followerId = g.user["_id"]
     if not followerId:
         return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
-    
+
     if not ObjectId.is_valid(userId):
         return jsonify({"result": "failed", "message": "올바르지 않은 사용자 ID"}), 400
 
     result = db.users.update_one(
-        {"_id": ObjectId(followerId)}, 
-        {"$pull": {"followingIds": ObjectId(userId)}}
+        {"_id": ObjectId(followerId)}, {"$pull": {"followingIds": ObjectId(userId)}}
     )
-    
+
     if result.modified_count == 0:
-        return jsonify({"result": "failed", "message": "팔로우하지 않은 사용자입니다"}), 400
-    
+        return (
+            jsonify({"result": "failed", "message": "팔로우하지 않은 사용자입니다"}),
+            400,
+        )
+
     return jsonify({"result": "success", "message": "성공적으로 언팔로우했습니다."})
-
-
 
 
 @main.route("/<userId>/recommends", methods=["GET"])
