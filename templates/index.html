@@ -22,7 +22,7 @@
 
   {% if not error %}
   <div class="flex items-center gap-5">
-    <button class="
+    <button onclick="followUser('{{feed._id}}')" class="
     cursor-pointer border border-gray-300 text-xl bg-white px-12 py-4 rounded-xl 
     opacity-{{ 50 if error else 100 }}
     transition-all active:scale-{{ 100 if error else 95 }}">

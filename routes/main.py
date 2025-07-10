@@ -111,46 +111,17 @@ def mypage():
     return render_template("mypage.html", user=g.user)
 
 
-# user api
-
-
-@main.route("/<userId>/following", methods=["PATCH"])
-@login_required
+@main.route("/<userId>/follow", methods=["POST"])
+@login_required_html
 def following(userId):
-
     followerId = g.user["_id"]
-    if not followerId:
-        return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
-
     db.users.update_one(
         {"_id": ObjectId(followerId)}, {"$addToSet": {"followingIds": ObjectId(userId)}}
     )
+    return redirect(url_for("main.index", followed="1"))
 
-    return jsonify({"result": "success", "message": "성공적으로 팔로윙"})
 
-
-@main.route("/<userId>/following", methods=["DELETE"])
-@login_required
-def un_following(userId):
-
-    followerId = g.user["_id"]
-    if not followerId:
-        return jsonify({"result": "failed", "message": "올바르지 않은 유저"}), 400
-
-    if not ObjectId.is_valid(userId):
-        return jsonify({"result": "failed", "message": "올바르지 않은 사용자 ID"}), 400
-
-    result = db.users.update_one(
-        {"_id": ObjectId(followerId)}, {"$pull": {"followingIds": ObjectId(userId)}}
-    )
-
-    if result.modified_count == 0:
-        return (
-            jsonify({"result": "failed", "message": "팔로우하지 않은 사용자입니다"}),
-            400,
-        )
-
-    return jsonify({"result": "success", "message": "성공적으로 언팔로우했습니다."})
+# user api
 
 
 @main.route("/<userId>/recommends", methods=["GET"])
