@@ -20,8 +20,3 @@ class RecommendItemDTO(BaseModel):
     title: str
     url: str
     description: str
-
-
-class RecommendsResponseDTO(BaseModel):
-    userId: str
-    recommends: List[RecommendItemDTO]
