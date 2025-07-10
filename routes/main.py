@@ -9,7 +9,7 @@ from flask import (
     url_for,
     flash,
 )
-from middlewares.auth_required import login_required_html
+from middlewares.auth_required import login_required_html, login_required
 from typing import List, Dict
 from dto.users import ProfileDTO
 from utils.recommends import find_recommends, find_my_recommends
@@ -55,6 +55,10 @@ def swip():
     except:
         exclude_ids = []
 
+    if getattr(g, "user", None):
+        exclude_ids.append(str(g.user["_id"]))
+
+    print(exclude_ids)
     pipeline = get_random_user_pipeline(exclude_ids)
     random_user = list(usersCollection.aggregate(pipeline))
 
@@ -98,12 +102,14 @@ def signup():
 @main.route("/mypage")
 @login_required_html
 def mypage():
-    print(g.user)
     return render_template("mypage.html", user=g.user)
 
 
+# user api
+
+
 @main.route("/<userId>/following", methods=["PATCH"])
-@login_required_html
+@login_required
 def following(userId):
 
     followerId = g.user["_id"]
@@ -118,7 +124,7 @@ def following(userId):
 
 
 @main.route("/<userId>/following", methods=["DELETE"])
-@login_required_html
+@login_required
 def un_following(userId):
 
     followerId = g.user["_id"]
@@ -142,7 +148,7 @@ def un_following(userId):
 
 
 @main.route("/<userId>/recommends", methods=["GET"])
-@login_required_html
+@login_required
 def get_recommends(userId):
     recommends = find_recommends(None, userId)
     recommendDTOs = []
